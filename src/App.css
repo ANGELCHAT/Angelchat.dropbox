@@ -1,33 +1,99 @@
-.App {
-  text-align: center;
+a {
+  color: #4384f5;
+  text-decoration: none;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.App {
+  padding: 0 10px;
+}
+
+.App-center {
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 150px;
+  color: rgb(66, 77, 87);
+  font-size: 14px;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-between;
+  color: rgb(66, 77, 87);
+  padding: 12px 0;
+  font-size: 15px;
+  border-bottom: 1px solid #dde2e670;
+  margin-bottom: 2px;
 }
 
-.App-link {
-  color: #61dafb;
+.File-description {
+  font-size: 14px;
+  margin: 0 0 10px;
+  color: gray;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.File-card {
+  color: #424d59;
+  border-bottom: 1px solid #dde2e670;
+  padding: 0 4px 4px;
+  margin-bottom: 2px;
+  font-size: 15px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.File-card:last-child {
+  border-bottom: 0;
+}
+
+.lc-card {
+  cursor: pointer;
+}
+
+.File-card__checkbox {
+  flex-grow: 0;
+  height: 19px;
+}
+
+.File-card__name {
+  flex-grow: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.File-card__name a {
+  color: #4384f5;
+  text-decoration: none;
+}
+
+.File-card__icon__img {
+  height: 32px;
+  width: 32px;
+  margin: 0 4px;
+}
+
+.File-card__bytes {
+  color: #8e949a;
+  white-space: nowrap;
+}
+
+.App-footer {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.App-footer,
+.App-footer a {
+  color: #8e949a;
+  font-size: 14px;
+}
+
+.App-footer a {
+  text-decoration: underline;
 }
