@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { Button, Loader } from "@livechat/design-system";
 import { createMessageBoxWidget } from "@livechat/agent-app-sdk";
@@ -16,34 +16,14 @@ function App() {
 
   const [widgetInstance, setWidgetInstance] = useState({});
   const [currentAppState, setAppState] = useState(LOADING);
-
   const [recentFiles, setRecentFiles] = useLocalStorageAndState(
     "recentFiles",
     []
   );
+
   const [selectedFiles, selectFiles] = useState([
     recentFiles[0] && recentFiles[0].name
   ]);
-
-  createMessageBoxWidget().then(widget => {
-    setWidgetInstance(widget);
-    if (recentFiles.length > 0) {
-      setAppState(RECENT_FILES);
-    } else {
-      setAppState(EMPTY_STATE);
-    }
-  });
-
-  const putRichMessage = () => {
-    widgetInstance.putMessage &&
-      widgetInstance.putMessage(
-        buildRichMessageWithFiles(
-          recentFiles.filter(({ name }) => includes(selectedFiles, name))
-        )
-      );
-  };
-
-  putRichMessage();
 
   const clearRecentFiles = () => {
     setRecentFiles([]);
@@ -51,13 +31,9 @@ function App() {
   };
 
   const handleDropboxSelect = files => {
-    putRichMessage();
     selectFiles(files.map(({ name }) => name));
     setAppState(RECENT_FILES);
-
-    let cache = [...recentFiles];
-    cache = files.concat(cache);
-    setRecentFiles(uniqBy(cache, "name"));
+    setRecentFiles(uniqBy([...files, ...recentFiles], "name"));
   };
 
   const handleDropboxOpen = () =>
@@ -76,8 +52,27 @@ function App() {
     } else {
       selectFiles([name, ...selectedFiles]);
     }
-    putRichMessage(selectedFiles);
   };
+
+  useEffect(() => {
+    createMessageBoxWidget().then(widget => {
+      setWidgetInstance(widget);
+      if (recentFiles.length > 0) {
+        setAppState(RECENT_FILES);
+      } else {
+        setAppState(EMPTY_STATE);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    widgetInstance.putMessage &&
+      widgetInstance.putMessage(
+        buildRichMessageWithFiles(
+          recentFiles.filter(({ name }) => includes(selectedFiles, name))
+        )
+      );
+  }, [widgetInstance, recentFiles, selectedFiles]);
 
   switch (currentAppState) {
     case LOADING:
