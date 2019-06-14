@@ -8,8 +8,11 @@ import { buildRichMessageWithFiles } from "./helpers";
 import { useStateWithLocalStorage } from "./hooks";
 import { LOADING, EMPTY_STATE, RECENT_FILES, TWO_HOURS } from "./constants";
 
+import { PoseGroup } from "react-pose";
+
 import "./App.css";
 import RecentFilesList from "./RecentFilesList";
+import View from "./View";
 
 function App() {
   const Dropbox = window.Dropbox || {};
@@ -90,58 +93,66 @@ function App() {
     // eslint-disable-next-line
   }, [widgetInstance, selectedFiles]);
 
-  switch (currentAppState) {
-    case LOADING:
-      return (
-        <div className="App">
-          <div className="App-center">
-            <Loader size="medium" />
-            <p>Loading...</p>
-          </div>
-        </div>
-      );
-    case RECENT_FILES:
-      return (
-        <div className="App">
-          <div className="App-header">
-            <div>
-              {selectedFiles.length > 0
-                ? `You selected ${selectedFiles.length} item${
-                    selectedFiles.length > 1 ? "s" : ""
-                  } for sending`
-                : "Pick from recently selected items"}
-            </div>
-            <a href="#browse" onClick={handleDropboxOpen}>
-              Browse Dropbox
-            </a>
-          </div>
-          <RecentFilesList
-            items={recentFiles}
-            isChecked={isSelected}
-            onClick={toggleFile}
-          />
-          <div className="App-footer">
-            <a href="#clear" onClick={clearRecentFiles}>
-              Clear this list
-            </a>
-          </div>
-        </div>
-      );
-    default:
-    case EMPTY_STATE:
-      return (
-        <div className="App">
-          <div className="App-center">
-            <p>
-              Browse your Dropbox and choose
-              <br />
-              which files or folders you want to send.
-            </p>
-            <Button onClick={handleDropboxOpen}>Browse Dropbox</Button>
-          </div>
-        </div>
-      );
-  }
+  return (
+    <div className="App">
+      <PoseGroup>
+        {(currentAppState => {
+          switch (currentAppState) {
+            case LOADING:
+              return (
+                <View key={LOADING}>
+                  <div className="App-center">
+                    <Loader size="medium" />
+                    <p>Loading...</p>
+                  </div>
+                </View>
+              );
+            case RECENT_FILES:
+              return (
+                <View key={RECENT_FILES}>
+                  <div className="App-header">
+                    <div>
+                      {selectedFiles.length > 0
+                        ? `You selected ${selectedFiles.length} item${
+                            selectedFiles.length > 1 ? "s" : ""
+                          } for sending`
+                        : "Pick from recently selected items"}
+                    </div>
+                    <a href="#browse" onClick={handleDropboxOpen}>
+                      Browse Dropbox
+                    </a>
+                  </div>
+                  <RecentFilesList
+                    items={recentFiles}
+                    isChecked={isSelected}
+                    onClick={toggleFile}
+                  />
+                  <div className="App-footer">
+                    <a href="#clear" onClick={clearRecentFiles}>
+                      Clear this list
+                    </a>
+                  </div>
+                </View>
+              );
+            default:
+            case EMPTY_STATE:
+              return (
+                <View key={EMPTY_STATE}>
+                  <div className="App-center">
+                    <p>
+                      Browse your Dropbox and choose
+                      <br />
+                      which files or folders you want to send.
+                    </p>
+                    <Button onClick={handleDropboxOpen}>Browse Dropbox</Button>
+                  </div>
+                </View>
+              );
+          }
+        })(currentAppState)}
+      </PoseGroup>
+    </div>
+  );
 }
 
 export default App;
