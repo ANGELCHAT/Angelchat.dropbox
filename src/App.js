@@ -22,7 +22,7 @@ function App() {
     "recentFiles",
     []
   );
-  const [selectedFiles, selectFiles] = useStateWithLocalStorage(
+  const [selectedFiles, setSelectedFiles] = useStateWithLocalStorage(
     "recentlySelectedFiles",
     []
   );
@@ -39,7 +39,7 @@ function App() {
     // Dropbox thumbnails expire in 4hrs - let's keep the timestamp
     files = files.map(file => ({ ...file, timestamp: Date.now() }));
     setRecentFiles(uniqBy([...files, ...recentFiles], "name"));
-    selectFiles(files.map(({ name }) => name));
+    setSelectedFiles(files.map(({ name }) => name));
     setAppState(RECENT_FILES);
   };
 
@@ -49,23 +49,23 @@ function App() {
 
   const toggleFile = name => () => {
     if (isSelected(name)) {
-      selectFiles([...selectedFiles.filter(item => item !== name)]);
+      setSelectedFiles([...selectedFiles.filter(item => item !== name)]);
     } else {
-      selectFiles([name, ...selectedFiles]);
+      setSelectedFiles([name, ...selectedFiles]);
     }
   };
 
   const clearRecentFiles = () => {
     setAppState(LOADING);
     setRecentFiles([]);
-    selectFiles([]);
+    setSelectedFiles([]);
   };
 
   const clearExpiredRecentFiles = () => {
     setRecentFiles(
       recentFiles.filter(file => Date.now() - file.timestamp < TWO_HOURS)
     );
-    selectFiles(getSelectedFiles().map(file => file.name));
+    setSelectedFiles(getSelectedFiles().map(file => file.name));
   };
 
   // fires just once, on init

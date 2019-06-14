@@ -7,10 +7,7 @@ export const useStateWithLocalStorage = (key, defaultValue = "") => {
 
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(value));
-    // the key won't change, so we don't / shouldn't
-    // put it in the deps
-    // eslint-disable-next-line
-  }, [value]);
+  }, [value, key]);
 
   return [value, setValue];
 };

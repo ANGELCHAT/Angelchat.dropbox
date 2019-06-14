@@ -2,7 +2,6 @@ import prettyBytes from "pretty-bytes";
 import { folderIcon } from "./constants";
 
 export const buildRichMessageWithFiles = files => {
-  console.log({ files });
   // keep in mind default icons provided by Dropbox are tiny (64x64);
   // also Dropbox thumbnails expire in 4 hours
   const makeImgUrl = thumbnailLink =>
